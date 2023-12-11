@@ -84,42 +84,4 @@ class ProductManager {
     }
   }
 
-// Ejemplo de uso
-const productManager = new ProductManager('productos.json');
-
-productManager.addProduct({
-  title: 'Producto 1',
-  description: 'Descripción 1',
-  price: 19.99,
-  thumbnail: '/img1.jpg',
-  code: 'P1',
-  stock: 50
-});
-
-productManager.addProduct({
-  title: 'Producto 2',
-  description: 'Descripción 2',
-  price: 29.99,
-  thumbnail: '/img2.jpg',
-  code: 'P2',
-  stock: 30
-});
-
-productManager.getProducts();
-
-const productIdToUpdate = 1;
-const updatedProduct = {
-  title: 'Producto 1 Actualizado',
-  description: 'Nueva descripción',
-  price: 25.99,
-  thumbnail: '/img1_updated.jpg',
-  code: 'P1',
-  stock: 40
-};
-
-productManager.updateProduct(productIdToUpdate, updatedProduct);
-
-const productIdToDelete = 2;
-productManager.deleteProduct(productIdToDelete);
-
 module.exports = ProductManager;
