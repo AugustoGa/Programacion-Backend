@@ -72,10 +72,17 @@ const postItem = async (req, res) => {
 const deleteItem = async(req, res)=>{
   try{
     await productManager.loadProducts();
-    const {id} = req.params;
-    const DeleteProd = productManager.deleteProduct(Number(id));
+
+    const { id } = req.params;
+    
+    const DeleteProd = await productManager.deleteProduct(id);
+    
+    console.log('Productos después de la eliminación:', productManager.getProducts());
+    
+    res.status(204).end();
+    
     res.send(DeleteProd);
-    res.status(204).end();//El código 204 indica que la solicitud se ha procesado con éxito, 
+    //El código 204 indica que la solicitud se ha procesado con éxito, 
  // pero no hay contenido para enviar en la respuesta. end() para indicar que la respuesta no contiene contenido adicional.
  console.log('Productos después de la eliminación:', productManager.getProducts());
   }catch(error){
