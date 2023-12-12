@@ -1,9 +1,9 @@
+const { response } = require("express");
+const ProductManager = require('../service/service.products');
 
-const { response } = require('express');
-const ProductManager = require('../service/service.products')
 
 
-const productManager = new ProductManager('productos.json');
+const productManager = new ProductManager('./productos.json');
 
 
 const getItems = async (req, res)=>{
@@ -40,7 +40,15 @@ const postItem = async (req, res) => {
   try {
     await productManager.loadProducts();
 
-    const { title, description, price, thumbnail, code, stock, status ,category} = req.body;
+    const { 
+      title, 
+      description, 
+      price, 
+      thumbnail, 
+      code, 
+      stock, 
+      status ,
+      category} = req.body;
     
     console.log(req.body);
 
@@ -69,29 +77,51 @@ const postItem = async (req, res) => {
   }
 };
 
-const deleteItem = async(req, res)=>{
+const updateProduct = async (req, res) => {
   try{
     await productManager.loadProducts();
-
-    const { id } = req.params;
-    
-    const DeleteProd = await productManager.deleteProduct(id);
-    
-    console.log('Productos después de la eliminación:', productManager.getProducts());
-    
-    res.status(204).end();
-    
-    res.send(DeleteProd);
-    //El código 204 indica que la solicitud se ha procesado con éxito, 
- // pero no hay contenido para enviar en la respuesta. end() para indicar que la respuesta no contiene contenido adicional.
- console.log('Productos después de la eliminación:', productManager.getProducts());
+    const {id} = req.params;
+    const productUpdate = await productManager.updateProduct(id, req.body);
+    res.status(200).json({ message: `Successfully modified product ${productUpdate}` });
   }catch(error){
-    console.error(error)
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: " Internal Server Error "});
   }
 };
 
+const deleteItem = async (req, res) => {
+  try{
+    await productManager.loadProducts();
+    const { id } = req.params;
+    const productDeleted = await productManager.deleteProduct(id);
+    console.log("Producto despues de la eliminacion" , productManager.getProducts());
+    if(productDeleted){
+      res.status(204).end(); // Send a 204 (No Content) response only if a product was deleted
+    }else{
+      res.status(404).json({ error: "Product not found"});
+    }
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ error: " Internal Server Error "});
+  }
+};
+// codigo viejo:
+// const deleteItem = async(req, res)=>{
+//   try{
+//     await productManager.loadProducts();
+//     const { id } = req.params;
+//     const DeleteProd = await productManager.deleteProduct(id);
+//     console.log('Productos después de la eliminación:', productManager.getProducts());
+//     res.status(204).end();
+//     res.send(DeleteProd);
+//  console.log('Productos después de la eliminación:', productManager.getProducts());
+//   }catch(error){
+//     console.error(error)
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 
-module.exports = { getItem , getItems ,  postItem , deleteItem };
+
+module.exports = { getItem , getItems ,  postItem , deleteItem , updateProduct };
 
 
