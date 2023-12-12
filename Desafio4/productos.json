@@ -1,23 +1,5 @@
 [
   {
-    "title": "Producto 1 Actualizado",
-    "description": "Nueva descripción",
-    "price": 25.99,
-    "thumbnail": "/img1_updated.jpg",
-    "code": "P1",
-    "stock": 40,
-    "id": 1
-  },
-  {
-    "title": "Producto 2 ",
-    "description": "Nueva descripción",
-    "price": 25.99,
-    "thumbnail": "/img2.jpg",
-    "code": "P2",
-    "stock": 40,
-    "id": 2
-  },
-  {
     "title": "Producto 3",
     "description": "Nueva descripción",
     "price": 25.99,
@@ -88,15 +70,6 @@
     "code": "P10",
     "stock": 40,
     "id": 10
-  },
-  {
-    "title": "hola",
-    "description": "hola",
-    "price": "12.50",
-    "thumbnail": "./hola",
-    "code": "hola",
-    "stock": "1",
-    "id": 11
   },
   {
     "title": "hola",

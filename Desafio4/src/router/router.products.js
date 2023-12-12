@@ -1,17 +1,24 @@
-// router.products.js
-const express = require('express');
-const { getItem, getItems, postItem, deleteItem } = require("../controllers/controller.products");
-
+const express = require("express");
 const router = express.Router();
+const {
+  getItem,
+  getItems,
+  postItem,
+  deleteItem,
+} = require("../controllers/controller.products");
 
-router.get('/products', getItems);
-router.get('/products/:pid', getItem);
-router.post('/products', postItem);
-// router.put('/:id', updateItem);
-router.delete('/:pid', deleteItem)
+router.get("/products", getItems);
+router.get("/products/:pid", getItem);
+router.post("/products", postItem);
+router.delete("/products/:id", deleteItem);
 
 module.exports = router;
 
+//! Codigo viejo
+// router.get('/products', getItems);
+// router.get('/products/:pid', getItem);
+// router.post('/products', postItem);
+// router.delete('/:pid', deleteItem) //? Cambie el pid por id, porque sino no lo tomaba
 
 /**
  * deleteProduct(id){
@@ -103,5 +110,5 @@ res.status(500).json({ error: ‘Error interno del servidor’ });
 };
 
 router.delete(‘/:pid’, deleteItem);
- * 
+ *
  */
