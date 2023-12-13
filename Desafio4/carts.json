@@ -1,5 +1,11 @@
 [
-{
-  
-}
-]
+    {
+      "title": "Producto 1 Actualizado",
+      "description": "Nueva descripción",
+      "price": 25.99,
+      "thumbnail": "/img1_updated.jpg",
+      "code": "P1",
+      "stock": 40,
+      "id": 1
+    } 
+  ]
