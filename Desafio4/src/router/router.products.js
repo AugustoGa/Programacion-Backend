@@ -24,7 +24,7 @@ router.put('/products/:id', updateProduct);
 router.delete('/products/:id', deleteItem);
 //Carts
 router.get('/carts', getItemsCarts);
-router.get('/carts/:pid', getItemCart);
+router.get('/carts/:id', getItemCart);
 router.post('/carts', addProductToCart );
 
 module.exports = router;

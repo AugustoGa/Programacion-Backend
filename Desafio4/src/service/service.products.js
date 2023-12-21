@@ -10,6 +10,9 @@ class ProductManager {
     //cargar productos desde el archivo al instanciar la clase
     async loadProducts(){
       try{
+        if (!this.path) {
+          throw new Error('La ruta del archivo no está definida en ProductManager');
+        }
         const data = await fs.readFileSync(this.path, 'utf-8');
         if(data){
           this.products = JSON.parse(data);
