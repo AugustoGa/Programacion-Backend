@@ -3,7 +3,7 @@ const ProductManager = require('../service/service.products');
 
 
 
-const productManager = new ProductManager('./productos.json');
+const productManager = new ProductManager('./src/model/productos.json');
 
 
 const getItems = async (req, res)=>{

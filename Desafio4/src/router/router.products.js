@@ -11,7 +11,8 @@ const {
 const {
         getItemCart, 
         getItemsCarts, 
-        addProductToCart 
+        addProductToCart ,
+        addCarts
        } = require("../controllers/controller.carts");
 
 
@@ -25,7 +26,8 @@ router.delete('/products/:id', deleteItem);
 //Carts
 router.get('/carts', getItemsCarts);
 router.get('/carts/:id', getItemCart);
-router.post('/carts', addProductToCart );
+router.post('/carts' , addCarts);
+router.post('/carts/:id/products/:productid', addProductToCart);
 
 module.exports = router;
 
