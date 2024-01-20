@@ -1,15 +1,14 @@
 const { Router } = require ('express');
-const ProductsModel = require('../models/products.model');
 const HTTP_RESPONSES = require('../constants/http-resposes');
-const ProductService = require('../service/products.service')
+const cartsService = require('../service/carts.service')
 
-const ProductRouter = Router();
+const CartsRouter = Router();
 
 
-ProductRouter.get('/', async(req, res)=>{
+CartsRouter.get('/', async(req, res)=>{
     try {
-        const products = await ProductService.getAll({status: true});
-        res.json({ payload: products})
+        const carts = await cartsService.getAll({status: true});
+        res.json({ payload: carts})
     } catch (error) {
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
@@ -17,18 +16,18 @@ ProductRouter.get('/', async(req, res)=>{
 
 })
 
-ProductRouter.get('/:id', async(req, res)=>{
+CartsRouter.get('/:id', async(req, res)=>{
     try {
         const {id} = req.params
-        const product = await ProductService.getOne({ _id : id, status: true});
-        res.json({ payload: product})
+        const cart = await cartsService.getOne({ _id : id, status: true});
+        res.json({ payload: cart})
     } catch (error) {
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
     }
 })
 
-ProductRouter.post('/', async(req, res)=>{ 
+CartsRouter.post('/', async(req, res)=>{ 
     try {
         const {        
             title,
@@ -39,7 +38,7 @@ ProductRouter.post('/', async(req, res)=>{
             stock
         } = req.body
 
-        const newProductInf ={
+        const newCartInf ={
             title,
             description,
             price,
@@ -47,8 +46,8 @@ ProductRouter.post('/', async(req, res)=>{
             code,
             stock
         }
-        const newProduct = await ProductService.inserOne(newProductInf);
-        res.json({ payload: newProduct })
+        const newCart = await cartsService.inserOne(newCartInf);
+        res.json({ payload: newCart })
         res.status(HTTP_RESPONSES.CREATED)
     } catch (error) {
         res.json({ error })
@@ -57,12 +56,12 @@ ProductRouter.post('/', async(req, res)=>{
 })
 
 
-ProductRouter.put('/:id', async(req, res)=>{
+CartsRouter.put('/:id', async(req, res)=>{
     try {
         const {id} = req.params
         const body = req.body
-        await ProductService.Update({ _id: id, status: true}, body )
-        res.json({ payload: 'Product update'})
+        await cartsService.Update({ _id: id, status: true}, body )
+        res.json({ payload: 'Cart update'})
     } catch (error) {
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
@@ -70,10 +69,10 @@ ProductRouter.put('/:id', async(req, res)=>{
 })
 
 
-ProductRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
+CartsRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
     try {
         const {id} = req.params
-        await ProductService.Update({ _id: id}, { status: false})
+        await cartsService.Update({ _id: id}, { status: false})
         res.json({ payload: 'Product deleted (soft delete)'})
     } catch (error) {
         res.json({ error })
@@ -82,4 +81,4 @@ ProductRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
 })
 
 
-module.exports = ProductRouter;
+module.exports = CartsRouter;
