@@ -1,13 +1,14 @@
 const { Router } = require ('express');
 const HTTP_RESPONSES = require('../constants/http-resposes');
 const cartsService = require('../service/carts.service')
+const productService = require('../service/products.service')
 
 const CartsRouter = Router();
 
 
-CartsRouter.get('/', async(req, res)=>{
+CartsRouter.post('/', async(req, res)=>{
     try {
-        const carts = await cartsService.getAll({status: true});
+        const carts = await cartsService.inserOne();
         res.json({ payload: carts})
     } catch (error) {
         res.json({ error })
@@ -27,26 +28,14 @@ CartsRouter.get('/:id', async(req, res)=>{
     }
 })
 
-CartsRouter.post('/', async(req, res)=>{ 
+CartsRouter.post('/:cid/products/:pid', async(req, res)=>{ 
     try {
-        const {        
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
-        } = req.body
-
-        const newCartInf ={
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
+        const { cid , pid } = req.params;
+        const product = await productService.getOne(pid)
+        if (!product) {
+            return res.status(404).json({ error: 'El producto con el ID proporcionado no existe.' })
         }
-        const newCart = await cartsService.inserOne(newCartInf);
+        const newCart = await cartsService.Update(cid, pid);
         res.json({ payload: newCart })
         res.status(HTTP_RESPONSES.CREATED)
     } catch (error) {

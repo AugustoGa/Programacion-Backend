@@ -1,23 +1,68 @@
 const CartsModel = require("../models/carts.model")
+const ProductsDao = require("./productDao")
+
 
 class CartsDao{
-    async getCarts() {
-        return await CartsModel.find({status: true})
+    async cartAdd(){
+      try {
+        const newCart = {
+          products : []
+        }
+        await CartsModel.create(newCart)
+
+      } catch (error) {
+        console.error('Error al crear el carro', error)
       }
-    
-      async createdCarts(newUserInfo) {
-        console.log('Creado desde el DAO')
-        return await CartsModel.create(newUserInfo)
-      }
-    
+    }
+
     async getCartById(id){
-        const products = await CartsModel.findOne({ _id: id , status: true})
-        return products
+      try {
+        return await CartsModel.findById({ id})
+      } catch (error) {
+        console.error('Error al optener el id del carrito', error)
+      }
     }
-    async updateCart(id , updateData){
-        const products = await CartsModel.updateOne({ _id: id }, updateData)
-        return products
+
+    async addProductInCart(cid, pid) {
+      try {
+          // Verificar si el carrito existe
+          const cart = await Carts.findById(cid);
+  
+          if (cart) {
+              // Verificar si el producto existe en la lista de productos generales
+              const product = await productManager.getProductByID(pid)
+  
+              if (product) {
+                 // Verificar si el producto ya está en el carrito
+                  const productIndex = cart.products.findIndex(prod => prod.product.toString() === pid.toString());
+  
+                  if (productIndex !== -1) {
+                      // Si el producto ya está en el carrito, incrementar la cantidad
+                      cart.products[productIndex].quantity++;
+                  } else {
+                      // Si el producto no está en el carrito, agregarlo
+                      cart.products.push({ product: new mongoose.Types.ObjectId(pid), quantity: 1 });
+                  }
+  
+                  // Guardar el carrito actualizado en la base de datos
+                  await cart.save();
+                  console.log('Producto agregado al carrito con éxito');
+                  return { success: true, message: 'Producto agregado correctamente al carrito' }
+              } else {
+                  console.log('El producto no existe en la base de datos');
+                  return { success: false, message: 'El producto no existe en la lista general de productos.' }
+              }
+          } else {
+              console.log('El carrito no existe en la base de datos');
+              return { success: false, message: 'carrito no encontrado.' }
+          }
+      } catch (error) {
+          console.error('Error al agregar el producto al carrito:', error);
+          return { success: false, message: 'internal server error' }
+      }
     }
+    
+
 };
 
 module.exports = CartsDao;

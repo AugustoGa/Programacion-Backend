@@ -6,23 +6,16 @@ const cartsDao = new CartsDao();
 //const productsDao = new ProductManagerDao('./models/products.json');
 
 
-const inserOne = async (newCartInf) =>{
+const inserOne = async () =>{
     try {
-        const newCart = await cartsDao.createdCarts(newCartInf)
+        const newCart = await cartsDao.cartAdd()
+        //const newCart = await cartsDao.createdCarts(newCartInf)
         return newCart
     } catch (error) {
         throw error
     }
 }
 
-const getAll = async () =>{
-    try {
-        const carts = await cartsDao.getCarts({status: true})
-        return carts
-    } catch (error) {
-        throw error
-    }
-}
 
 const getOne = async (id) =>{
     try {
@@ -33,13 +26,13 @@ const getOne = async (id) =>{
     }
 }
 
-const Update = async (id , updateData) =>{
+const Add = async (id , updateData) =>{
     try {
-        const cart = await cartsDao.updateCart({ _id: id }, updateData)
+        const cart = await cartsDao.addProductCart({ _id: id }, updateData)
         return cart
     } catch (error) {
         throw error
     }
 }
 
-module.exports = { inserOne , getAll , getOne , Update }
+module.exports = { inserOne , getOne , Add }
