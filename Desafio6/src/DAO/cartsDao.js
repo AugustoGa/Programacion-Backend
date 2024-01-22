@@ -17,7 +17,7 @@ class CartsDao{
 
     async getCartById(id){
       try {
-        return await CartsModel.findById({ id})
+        return await CartsModel.findById(id)
       } catch (error) {
         console.error('Error al optener el id del carrito', error)
       }

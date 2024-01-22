@@ -35,10 +35,11 @@ CartsRouter.post('/:cid/products/:pid', async(req, res)=>{
         if (!product) {
             return res.status(404).json({ error: 'El producto con el ID proporcionado no existe.' })
         }
-        const newCart = await cartsService.Update(cid, pid);
+        const newCart = await cartsService.Add(cid, pid);
         res.json({ payload: newCart })
         res.status(HTTP_RESPONSES.CREATED)
     } catch (error) {
+        console.error('error en post', error)
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
     }

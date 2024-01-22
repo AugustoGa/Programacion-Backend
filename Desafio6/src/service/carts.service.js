@@ -19,7 +19,7 @@ const inserOne = async () =>{
 
 const getOne = async (id) =>{
     try {
-        const cart = await cartsDao.getCartById({ _id: id , status: true})
+        const cart = await cartsDao.getCartById(id)
         return cart
     } catch (error) {
         throw error, 'Error al buscar por id'
@@ -28,9 +28,10 @@ const getOne = async (id) =>{
 
 const Add = async (id , updateData) =>{
     try {
-        const cart = await cartsDao.addProductCart({ _id: id }, updateData)
+        const cart = await cartsDao.addProductInCart({ _id: id }, updateData)
         return cart
     } catch (error) {
+        console.error('error Add Cart', error)
         throw error
     }
 }

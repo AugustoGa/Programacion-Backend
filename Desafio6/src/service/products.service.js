@@ -26,7 +26,7 @@ const getAll = async () =>{
 
 const getOne = async (id) =>{
     try {
-        const products = await productsDao.getProductById({ _id: id , status: true})
+        const products = await productsDao.getProductById(id)
         return products
     } catch (error) {
         throw error, 'Error al buscar por id'
