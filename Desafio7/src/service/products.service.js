@@ -1,9 +1,9 @@
 const ProductsDao = require('../DAO/productDao')
-//const ProductManagerDao = require('../DAO/productManagerDao')
+
 
 
 const productsDao = new ProductsDao();
-//const productsDao = new ProductManagerDao('./models/products.json');
+
 
 
 const inserOne = async (newProductInf) =>{

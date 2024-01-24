@@ -1,15 +1,13 @@
 const CartsDao = require('../DAO/cartsDao')
-//const ProductManagerDao = require('../DAO/productManagerDao')
 
 
 const cartsDao = new CartsDao();
-//const productsDao = new ProductManagerDao('./models/products.json');
+
 
 
 const inserOne = async () =>{
     try {
         const newCart = await cartsDao.cartAdd()
-        //const newCart = await cartsDao.createdCarts(newCartInf)
         return newCart
     } catch (error) {
         throw error

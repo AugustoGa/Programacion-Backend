@@ -46,6 +46,14 @@ CartsRouter.post('/:cid/products/:pid', async(req, res)=>{
 })
 
 
+
+//-----------------------------------------------------------------------------------------
+
+
+
+
+//PUT api/carts/:cid 
+//deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
 CartsRouter.put('/:id', async(req, res)=>{
     try {
         const {id} = req.params
@@ -59,6 +67,37 @@ CartsRouter.put('/:id', async(req, res)=>{
 })
 
 
+//PUT api/carts/:cid/products/:pid 
+//deberá poder actualizar SÓLO la cantidad de ejemplares del producto,
+// por cualquier cantidad pasada desde req.body
+CartsRouter.put('/:id', async(req, res)=>{
+    try {
+        const {id} = req.params
+        const body = req.body
+        await cartsService.Update({ _id: id, status: true}, body )
+        res.json({ payload: 'Cart update'})
+    } catch (error) {
+        res.json({ error })
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+    }
+})
+
+//DELETE api/carts/:cid/products/:pid
+//deberá eliminar del carrito el producto seleccionado.
+CartsRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
+    try {
+        const {id} = req.params
+        await cartsService.Update({ _id: id}, { status: false})
+        res.json({ payload: 'Product deleted (soft delete)'})
+    } catch (error) {
+        res.json({ error })
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+    }
+})
+
+
+//DELETE api/carts/:cid
+//deberá eliminar todos los productos del carrito 
 CartsRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
     try {
         const {id} = req.params
