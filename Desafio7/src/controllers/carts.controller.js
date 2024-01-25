@@ -2,6 +2,7 @@ const { Router } = require ('express');
 const HTTP_RESPONSES = require('../constants/http-resposes');
 const cartsService = require('../service/carts.service')
 const productService = require('../service/products.service')
+const mongoose = require('mongoose')
 
 const CartsRouter = Router();
 
@@ -20,7 +21,17 @@ CartsRouter.post('/', async(req, res)=>{
 CartsRouter.get('/:id', async(req, res)=>{
     try {
         const {id} = req.params
-        const cart = await cartsService.getOne({ _id : id, status: true});
+        const cart = await cartsService.getOne({ _id : id});
+        res.json({ payload: cart})
+    } catch (error) {
+        res.json({ error })
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+    }
+})
+
+CartsRouter.get('/', async(req, res)=>{
+    try {
+        const cart = await cartsService.getAll()
         res.json({ payload: cart})
     } catch (error) {
         res.json({ error })
@@ -57,12 +68,12 @@ CartsRouter.post('/:cid/products/:pid', async(req, res)=>{
 CartsRouter.put('/:id', async(req, res)=>{
     try {
         const {id} = req.params
-        const body = req.body
-        await cartsService.Update({ _id: id, status: true}, body )
-        res.json({ payload: 'Cart update'})
+        const {product} = req.body
+        await cartsService.updateCart(id , product)
+        res.json({ payload: 'Cart updated successfully'})
     } catch (error) {
-        res.json({ error })
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+        console.error(error)
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Error put'})
     }
 })
 
@@ -82,30 +93,45 @@ CartsRouter.put('/:id', async(req, res)=>{
     }
 })
 
-//DELETE api/carts/:cid/products/:pid
+//DELETE api/carts/:cid/products/:pid  (✔)
 //deberá eliminar del carrito el producto seleccionado.
-CartsRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
+CartsRouter.delete('/:cid/products/:pid', async(req, res)=>{  
     try {
-        const {id} = req.params
-        await cartsService.Update({ _id: id}, { status: false})
-        res.json({ payload: 'Product deleted (soft delete)'})
+        const { cid , pid } = req.params
+        if(!mongoose.Types.ObjectId.isValid( pid )){
+            return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ error: 'Invalid Product (id)'})
+        }
+        const cart = await cartsService.getOne({ _id : cid })
+        if( !cart ){
+            return res.status(HTTP_RESPONSES.NOT_FOUND).json({ error: 'Cart not found' });
+        }
+        const product = await productService.getOne( pid )
+        if( !product ){
+            return res.status(HTTP_RESPONSES.NOT_FOUND).json({ error: 'Product not found'})
+        }
+        await cartsService.removeProductFromCart( cid , pid )
+        res.json({ payload: 'Product successfully removed from cart'})
     } catch (error) {
-        res.json({ error })
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+        console.error(error)
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Error delete'})
     }
 })
 
 
-//DELETE api/carts/:cid
+//DELETE api/carts/:cid (✔)
 //deberá eliminar todos los productos del carrito 
-CartsRouter.delete('/:id', async(req, res)=>{  //SOFT DELETE
+CartsRouter.delete('/:id', async(req, res)=>{  
     try {
         const {id} = req.params
-        await cartsService.Update({ _id: id}, { status: false})
-        res.json({ payload: 'Product deleted (soft delete)'})
+        if(!mongoose.Types.ObjectId.isValid( id )){
+            return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ error: 'Invalid id'})
+        }
+        const cart = cartsService.deleteCart({ _id : id})
+        res.json({ payload: 'Cart deleted '})
+        return cart
     } catch (error) {
         res.json({ error })
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Error delete'})
     }
 })
 

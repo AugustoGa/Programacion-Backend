@@ -13,7 +13,17 @@ class CartsDao {
       };
       await CartsModel.create(newCart);
     } catch (error) {
-      console.error("Error al crear el carro", error);
+      console.error(error);
+      throw new Error('Error al crear el carro (Dao)');
+    }
+  }
+
+  async getCarts(){
+    try {
+      return await CartsModel.find()
+    } catch (error) {
+      console.error(error, 'Error getCarts (Dao)')
+      throw new error
     }
   }
 
@@ -22,7 +32,7 @@ class CartsDao {
       // Cambiar Carts por CartsModel
       return await CartsModel.findById(id);
     } catch (error) {
-      console.error("Error al obtener el id del carrito", error);
+      console.error("Error al obtener el id del carrito (Dao)", error);
     }
   }
 
@@ -76,6 +86,17 @@ class CartsDao {
       return { success: false, message: "Error interno del servidor" };
     }
   }
+
+  async cartDelete(id){
+    try {
+      return await CartsModel.deleteMany(id)
+    } catch (error) {
+      console.error(error, 'Error Delete (Dao) ')
+      throw new error
+    }
+  }
 }
+
+
 
 module.exports = CartsDao;

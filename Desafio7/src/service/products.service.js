@@ -42,4 +42,5 @@ const Update = async (id , updateData) =>{
     }
 }
 
+
 module.exports = { inserOne , getAll , getOne , Update }
