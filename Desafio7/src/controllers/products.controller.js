@@ -9,7 +9,7 @@ const ProductRouter = Router();
 ProductRouter.get('/', async(req, res)=>{
     try {
         const products = await ProductService.getAll({status: true});
-        res.render('home', { products , style: 'style.css' })
+        res.json( { products  })
     } catch (error) {
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)

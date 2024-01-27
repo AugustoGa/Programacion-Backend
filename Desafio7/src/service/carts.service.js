@@ -74,22 +74,51 @@ const removeProductFromCart = async ( cid , pid ) =>{
     }
 }
 
-const updateCart = async( id , updateProd) => {
+const updateCart = async (id, updateProd) => {
     try {
-        const cart = await cartsDao.getCartById(id)
-        if(cart){
-            updateProd && updateProd.forEach(updatePro => {
-                const productExist = cart.products.find(prod => prod.prodId === updatePro.productId)
-                if(productExist){
+        const cart = await cartsDao.getCartById(id);
+
+        if (!cart) {
+            console.log("El carrito no existe en la base de datos");
+            return { success: false, message: "Carrito no encontrado." };
+        }
+
+        // Verifica si updateProd está definido antes de iterar
+        if (updateProd && Array.isArray(updateProd)) {
+            updateProd.forEach(updatePro => {
+                const productExist = cart.products.find(prod => prod.prodId === updatePro.productId);
+
+                if (productExist) {
+                    // Actualiza la cantidad directamente
                     productExist.quantity = updatePro.quantity;
+                } else {
+                    // Si el producto no existe, agrégalo al carrito
+                    cart.products.push({
+                        prodId: updatePro.productId,
+                        quantity: updatePro.quantity
+                    });
                 }
             });
+        } else {
+            console.log("La información de actualización de productos no está definida o no es un array.");
+            return { success: false, message: "Datos de actualización de productos incorrectos." };
         }
-        await cart.save()
+
+        // Guarda el carrito actualizado en la base de datos
+        await cart.save();
+        console.log("Carrito actualizado con éxito");
+
+        return {
+            success: true,
+            message: "Carrito actualizado correctamente"
+        };
     } catch (error) {
-        console.error(error);
-        throw error
+        console.error("Error al actualizar el carrito:", error);
+        throw new Error('Error updateCart');
     }
-}
+};
+
+
+
 
 module.exports = { inserOne , getAll , getOne , Add , deleteCart , removeProductFromCart , updateCart }

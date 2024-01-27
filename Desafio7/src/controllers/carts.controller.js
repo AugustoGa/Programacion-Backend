@@ -63,13 +63,13 @@ CartsRouter.post('/:cid/products/:pid', async(req, res)=>{
 
 
 
-//PUT api/carts/:cid 
+//PUT api/carts/:cid (✔)
 //deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
 CartsRouter.put('/:id', async(req, res)=>{
     try {
         const {id} = req.params
-        const {product} = req.body
-        await cartsService.updateCart(id , product)
+        const {products} = req.body
+        await cartsService.updateCart(id , products)
         res.json({ payload: 'Cart updated successfully'})
     } catch (error) {
         console.error(error)
@@ -80,16 +80,26 @@ CartsRouter.put('/:id', async(req, res)=>{
 
 //PUT api/carts/:cid/products/:pid 
 //deberá poder actualizar SÓLO la cantidad de ejemplares del producto,
-// por cualquier cantidad pasada desde req.body
-CartsRouter.put('/:id', async(req, res)=>{
+//por cualquier cantidad pasada desde req.body
+CartsRouter.put('/:cid/products/:pid', async(req, res)=>{
     try {
-        const {id} = req.params
-        const body = req.body
-        await cartsService.Update({ _id: id, status: true}, body )
-        res.json({ payload: 'Cart update'})
+        const { cid , pid } = req.params
+        if(!mongoose.Types.ObjectId.isValid( pid )){
+            return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ error: 'Invalid Product (id)'})
+        }
+        const cart = await cartsService.getOne({ _id : cid })
+        if( !cart ){
+            return res.status(HTTP_RESPONSES.NOT_FOUND).json({ error: 'Cart not found' });
+        }
+        const product = await productService.getOne( pid )
+        if( !product ){
+            return res.status(HTTP_RESPONSES.NOT_FOUND).json({ error: 'Product not found'})
+        }
+        await cartsService.removeProductFromCart( cid , pid )
+        res.json({ payload: 'Product successfully removed from cart'})
     } catch (error) {
-        res.json({ error })
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+        console.error(error)
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Error delete'})
     }
 })
 

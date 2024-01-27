@@ -1,0 +1,76 @@
+peticion HTTP a CART
+GET   - EJM
+http://localhost:3000/carts
+Resultado:
+{
+    "payload": [
+        {
+            "_id": "65aeaeb59dc24171aa342381",
+            "products": [
+                {
+                    "product": "65a72a6927f8d96c07209d9d",
+                    "quantity": 30,
+                    "_id": "65af10d0615ca6208c11c21c"
+                }
+            ],
+            "__v": 3
+        },
+        {
+            "_id": "65aefe1e30a25d969ffc47be",
+            "products": [
+                {
+                    "product": "65a72a9b27f8d96c07209da3",
+                    "quantity": 1,
+                    "_id": "65b1c8bb5b43f3d5616b4f24"
+                }
+            ],
+            "__v": 3
+        }
+    ]
+}
+
+----------------------------
+GET/ID   - EJM
+http://localhost:3000/carts/65aeaeb59dc24171aa342381
+Resultado:
+{
+    "payload": {
+        "_id": "65aeaeb59dc24171aa342381",
+        "products": [
+            {
+                "product": "65a72a6927f8d96c07209d9d",
+                "quantity": 30,
+                "_id": "65af10d0615ca6208c11c21c"
+            }
+        ],
+        "__v": 3
+    }
+}
+
+----------------------------
+PUT/ID   - EJM
+http://localhost:3000/carts/65aeaeb59dc24171aa342381 (PUT)
+Resultado:
+{
+  "products": [
+    {
+      "product": "65a72a9b27f8d96c07209da3",
+      "quantity": 30
+    }
+  ]
+}
+
+//// no actualiza // Error actualiza 1 solo y el primer product termina con cantidad 100
+{
+  "products": [
+    {
+      "product": "65a72a6927f8d96c07209d9d",
+      "quantity": 35
+    },
+    {
+      "product": "65a72a8827f8d96c07209da1",
+      "quantity": 100
+    }
+  ]
+}
+//// no actualiza
