@@ -78,28 +78,30 @@ CartsRouter.put('/:id', async(req, res)=>{
 })
 
 
-//PUT api/carts/:cid/products/:pid 
+//PUT api/carts/:cid/products/:pid (✔)
 //deberá poder actualizar SÓLO la cantidad de ejemplares del producto,
 //por cualquier cantidad pasada desde req.body
 CartsRouter.put('/:cid/products/:pid', async(req, res)=>{
     try {
         const { cid , pid } = req.params
+        const { quantity } = req.body
         if(!mongoose.Types.ObjectId.isValid( pid )){
             return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ error: 'Invalid Product (id)'})
         }
-        const cart = await cartsService.getOne({ _id : cid })
-        if( !cart ){
-            return res.status(HTTP_RESPONSES.NOT_FOUND).json({ error: 'Cart not found' });
+        if(!mongoose.Types.ObjectId.isValid( cid )){
+            return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ error: 'Invalid Cart (id)'})
         }
-        const product = await productService.getOne( pid )
-        if( !product ){
-            return res.status(HTTP_RESPONSES.NOT_FOUND).json({ error: 'Product not found'})
+
+        const result = await cartsService.updateProductInCart( pid , cid , quantity )
+
+        if( result.success ){
+            res.status(HTTP_RESPONSES.OK).json({ success : result.message})
+        }else {
+            res.status(HTTP_RESPONSES.NO_CONTENT).json({ success : result.message})
         }
-        await cartsService.removeProductFromCart( cid , pid )
-        res.json({ payload: 'Product successfully removed from cart'})
     } catch (error) {
         console.error(error)
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Error delete'})
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Error PUT'})
     }
 })
 

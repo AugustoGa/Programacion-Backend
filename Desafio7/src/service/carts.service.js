@@ -113,12 +113,28 @@ const updateCart = async (id, updateProd) => {
             message: "Carrito actualizado correctamente"
         };
     } catch (error) {
-        console.error("Error al actualizar el carrito:", error);
         throw new Error('Error updateCart');
     }
 };
 
+const updateProductInCart = async ( id , pid , newQuantity) =>{
+    try {
+        const cart = await cartsDao.getCartById(id)
+        if(!cart) {
+            console.log('El carrito no existe en la BD')
+            return { success : false, message  : 'Carrito no encontrado'}
+        }
+        const productIndex = cart.products.findIndex( product = product.id == pid)
+        if(productIndex === -1){
+            return { success : false, message  : 'Producto no encontrado en el carrito'}
+        }
+        cart.products[productIndex].quantity = newQuantity
+        await cart.save();
+        return { success : true, message : 'Carrito actualizado correctamente'}
+    } catch (error) {
+        throw new Error('Error updateProductInCart')
+    }
+}
 
 
-
-module.exports = { inserOne , getAll , getOne , Add , deleteCart , removeProductFromCart , updateCart }
+module.exports = { inserOne , getAll , getOne , Add , deleteCart , removeProductFromCart , updateCart , updateProductInCart }
