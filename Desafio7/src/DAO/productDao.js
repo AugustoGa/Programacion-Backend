@@ -1,14 +1,17 @@
+
 const ProductsModel = require("../models/products.model")
 
 class ProductsDao{
-    async getProducts() {
+    async getProducts(options) {
       try {
-        return await ProductsModel.find({status: true})
+        const { page, limit } = options;
+        const query = { status: true };
+        const result = await ProductsModel.paginate(query, { page, limit , lean:true,});
+        return result;
       } catch (error) {
         console.error('error getProducts', error)
         throw error
       }
-
       }
     
       async createdProducts(newUserInfo) {

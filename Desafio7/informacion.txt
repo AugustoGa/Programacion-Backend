@@ -74,3 +74,12 @@ Resultado:
   ]
 }
 //// no actualiza
+
+
+
+
+/----------------------------------------------------------------------------------------------------------/
+peticion HTTP a PRODUCTS
+
+GET (Utilizando paginacion)
+http://localhost:3000/products?limit=3&page=2

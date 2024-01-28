@@ -1,4 +1,6 @@
-
+body {
+  background: rgb(rgb(201, 202, 245));
+}
  
  .card {
     width: 14rem;

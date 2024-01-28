@@ -1,20 +1,52 @@
 const { Router } = require ('express');
 const ProductsModel = require('../models/products.model');
 const HTTP_RESPONSES = require('../constants/http-resposes');
-const ProductService = require('../service/products.service')
+const ProductService = require('../service/products.service');
+const ProductsDao = require('../DAO/productDao');
 
 const ProductRouter = Router();
 
 
-ProductRouter.get('/', async(req, res)=>{
+ProductRouter.get('/', async (req, res) => {
     try {
-        const products = await ProductService.getAll({status: true});
+        const { page, limit } = req.query;
+        const options = {
+            page: parseInt(page) || 1,
+            limit: parseInt(limit) || 2
+        };
+
+        // Obtener los productos paginados
+        const paginatedProducts = await ProductService.getAll(options);
+
+        // Extraer datos de paginación del resultado paginado
+        const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = paginatedProducts;
+
+        // Renderizar la vista 'index' con los datos obtenidos
+        res.render('index', {
+            products: docs, // Usar 'docs' para obtener los productos
+            hasPrevPage,
+            hasNextPage,
+            nextPage,
+            prevPage
+        });
+    } catch (error) {
+        // Manejar errores
+        console.error('Error al obtener y renderizar productos:', error);
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
+    }
+
+
+
+    /* Codigo sin renderizar HBS
+    try {
+        const { page , limit } = req.query;
+        const products = await ProductService.getAll(page , limit , {status: true});
         res.json( { products  })
     } catch (error) {
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
     }
-
+    */
 })
 
 ProductRouter.get('/:id', async(req, res)=>{

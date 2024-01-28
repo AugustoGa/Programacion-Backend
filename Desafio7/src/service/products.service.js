@@ -15,14 +15,15 @@ const inserOne = async (newProductInf) =>{
     }
 }
 
-const getAll = async () =>{
+const getAll = async (options) => {
     try {
-        const products = await productsDao.getProducts({status: true})
-        return products
+        const products = await productsDao.getProducts(options);
+        return products;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
+
 
 const getOne = async (id) =>{
     try {
