@@ -32,7 +32,7 @@ CartsRouter.get('/:id', async(req, res)=>{
 CartsRouter.get('/', async(req, res)=>{
     try {
         const cart = await cartsService.getAll()
-        res.json({ payload: cart})
+        res.render('cart',{  cart})
     } catch (error) {
         res.json({ error })
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
