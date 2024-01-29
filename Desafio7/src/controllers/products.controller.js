@@ -9,10 +9,13 @@ const ProductRouter = Router();
 
 ProductRouter.get('/', async (req, res) => {
     try {
-        const { page, limit } = req.query;
+        const { page, limit, sort, category, stock } = req.query;
         const options = {
             page: parseInt(page) || 1,
-            limit: parseInt(limit) || 2
+            limit: parseInt(limit) || 2,
+            sort:parseInt(sort) || 0,
+            category:parseInt(category) || 0,
+            stock:parseInt(stock) || 0
         };
 
         // Obtener los productos paginados
