@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const Users = require('../Dao/models/user.model')
+const Users = require('../models/user.model')
 const HTTP_RESPONSES = require('../constants/http-responses')
 
 

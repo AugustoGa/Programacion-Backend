@@ -4,6 +4,7 @@ const Router = require('./router/index.router');
 const exphbs = require('express-handlebars');
 const { Server } = require('socket.io');
 const Messages = require('./models/messages.model');
+const session = require('express-session');
 
 const app = express();
 const port = 3000;
@@ -12,6 +13,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(process.cwd() + '/src/public'));
 app.use('/bootstrap', express.static(process.cwd() + '/node_modules/bootstrap/dist'));
+//Session
+app.use(session({
+    secret: 'secretCoder',
+    resave: true,
+    saveUninitialized: true,
+}));
 
 // Configuración de Handlebars
 app.engine('.hbs', exphbs({
@@ -21,6 +28,7 @@ app.engine('.hbs', exphbs({
     extname: '.hbs',
     cache: false
 }));
+
 app.set('view engine', '.hbs');
 app.set('views', process.cwd() + '/src/views');
 
