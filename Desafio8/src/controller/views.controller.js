@@ -16,12 +16,12 @@ ViewsRouter.get('/login', async (req, res) => {
 
 ViewsRouter.get('/signup', async (req, res) => {
     try {
-     res.render ('signup')   
+        res.render('signup');
     } catch (error) {
-        console.error ('Error:', error.message)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error('Error:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-})
+});
 
 ViewsRouter.get('/profile', authMiddleware, async (req, res) => {
     try {

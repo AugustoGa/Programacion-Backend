@@ -30,10 +30,11 @@ function submitForm() {
     .catch(error => console.error('Error:', error))
 }
 
-//capturo el span de registrate para cuando hago un click redireccionarlo
-const registrate = document.getElementById('Registrate')
+document.addEventListener('DOMContentLoaded', () => {
+    const registrate = document.getElementById('Registrate');
 
-//agrego funcion de escucha para cuando hagan click, redireccionar:
-registrate.addEventListener('click', () => {
-    window.location.href = '/signup'
-})
+    if (registrate) {
+        registrate.addEventListener('click', () => {
+            window.location.href = '/signup';
+        });
+    }});

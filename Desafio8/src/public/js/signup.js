@@ -1,4 +1,5 @@
 function submitForm() {
+    console.log('FormData:', formData);
     // Recopila los datos del formulario en un objeto
     const formData = {
         first_name: document.getElementById('nombre').value,
@@ -7,7 +8,7 @@ function submitForm() {
         email: document.getElementById('email').value.toUpperCase(),
         password: document.getElementById('password').value,
     }
-
+    console.log('FormData:', formData);
     // Realiza una solicitud POST utilizando fetch y envía los datos en formato JSON
     fetch('/api/users', {
         method: 'POST',
@@ -29,7 +30,7 @@ function submitForm() {
     })
     .catch(error => {
         // Capturar y manejar el error
-        console.error('Error:', error);
+        console.error('Error al registrar usuario:', error);
         // Mostrar un mensaje de alerta al usuario
         Swal.fire({
             icon: "error",

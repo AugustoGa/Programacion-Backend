@@ -18,10 +18,10 @@ UserRouter.post ('/', async (req, res) => {
         }
         console.log ('NewUserInfo:', newUserInfo)
         const user = await Users.create(newUserInfo)
-        res.status(HTTP_RESPONSES.CREATED).res.json ({status: 'success', messae: user })
+        res.json({ status: 'success', message: user });
      } catch (error) {
         console.error ('Error:', error.message)
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' })
+        res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 
