@@ -17,11 +17,12 @@ class User {
             throw new error
         }
     }
-    async getOneUser( ){
+    async getOneUser(filter) {
         try {
-            return await UserModel.findOne();
+            return await UserModel.findOne(filter);
         } catch (error) {
-            console.error("Error al obtener el id", error);
+            console.error("Error al obtener el usuario", error);
+            throw error;
         }
     }
 }

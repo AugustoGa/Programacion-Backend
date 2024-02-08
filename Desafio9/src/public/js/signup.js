@@ -1,16 +1,14 @@
-function submitForm() {
-    // Recopila los datos del formulario en un objeto
+function handleSignupForm(event) {
+    event.preventDefault();
+
     const formData = {
-        first_name: document.getElementById('nombre').value,
-        last_name: document.getElementById('apellido').value,
-        age: document.getElementById('edad').value,
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        age: document.getElementById('age').value,
         email: document.getElementById('email').value.toUpperCase(),
         password: document.getElementById('password').value,
     };
 
-    console.log('FormData:', formData);
-
-    // Realiza una solicitud POST utilizando fetch y envía los datos en formato JSON
     fetch('/api/users', {
         method: 'POST',
         headers: {
@@ -20,23 +18,16 @@ function submitForm() {
     })
     .then(response => {
         if (!response.ok) {
-            // Si la respuesta no es exitosa, lanzar un error
             throw new Error('Error al registrar usuario');
         }
         return response.json();
     })
     .then(data => {
-        // Manejar la respuesta después de que se haya completado la solicitud
         console.log('Respuesta del servidor:', data);
-
-        // Redirigir a la página de inicio de sesión
         window.location.href = '/login';
     })
     .catch(error => {
-        // Capturar y manejar el error
         console.error('Error al registrar usuario:', error);
-
-        // Mostrar un mensaje de alerta al usuario
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -44,3 +35,11 @@ function submitForm() {
         });
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.getElementById('signupForm');
+
+    if (signupForm) {
+        signupForm.addEventListener('submit', handleSignupForm);
+    }
+});

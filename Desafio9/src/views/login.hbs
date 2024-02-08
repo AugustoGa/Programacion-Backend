@@ -1,5 +1,5 @@
 <div class="d-flex align-items-center justify-content-center vh-100">
-<form class="form" onsubmit="submitForm(); return false;">
+    <form class="form" id="loginForm" action="/api/auth" method="POST">
   <!-- Email input -->
   <div class="form-outline mb-4">
     <input  type="text" placeholder="Email" name="usuario" id="usuario" />
@@ -7,10 +7,10 @@
   </div>
 
   <!-- Password input -->
-  <div class="form-outline mb-4">
+<div class="form-outline mb-4">
     <input type="password" placeholder="Password" name="password" id="password" />
-    <label class="form-label" for="form2Example2">Password</label>
-  </div>
+    <label class="form-label" for="password">Password</label>
+</div>
 
   <!-- 2 column grid layout for inline styling -->
   <div class="row mb-4">
