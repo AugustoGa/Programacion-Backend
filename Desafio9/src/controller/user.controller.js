@@ -1,23 +1,16 @@
 const { Router } = require('express')
 const Users = require('../service/user.service')
 const HTTP_RESPONSES = require('../contants/http-responses')
+const passport = require ('passport')
 
 const users = new Users()
 
 const UserRouter = Router()
 
-UserRouter.post('/', async (req, res) => {
+UserRouter.post ('/', passport.authenticate
+('register', {failureRedirect: '/api/users/fail-Register'}),  
+async (req, res) => {
     try {
-        const { first_name, last_name, age, email, password } = req.body;
-        const newUserInfo = {
-            first_name: first_name,
-            last_name: last_name,
-            age: age,
-            email: email,
-            password: password,
-        };
-        console.log('NewUserInfo:', newUserInfo);
-        const user = await users.createdUser(newUserInfo);
         res.status(HTTP_RESPONSES.CREATED).json({ status: 'success', message: user });
     } catch (error) {
         console.error('Error:', error.message);
@@ -25,6 +18,9 @@ UserRouter.post('/', async (req, res) => {
     }
 });
 
-
+UserRouter.get ('/fail-Register', (req, res) => {
+    console.log ('Fallo registro')
+    res.status(HTTP_RESPONSES.NOT_FOUND).json({status: 'error',  error: 'bad Request' })
+})
 
 module.exports = UserRouter

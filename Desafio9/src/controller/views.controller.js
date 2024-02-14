@@ -3,7 +3,7 @@ const HTTP_RESPONSES = require('../contants/http-responses')
 
 const ViewsRouter = Router()
 
-ViewsRouter.get('/login', async(req , res) =>{
+ViewsRouter.get('/login', publicAcce , async(req , res) =>{
     try {
         res.render('login')
     } catch (error) {
@@ -12,7 +12,7 @@ ViewsRouter.get('/login', async(req , res) =>{
     }
 })
 
-ViewsRouter.get('/signup', async(req , res) =>{
+ViewsRouter.get('/signup', publicAcces , async(req , res) =>{
     try {
         res.render('signup')
     } catch (error) {
@@ -21,7 +21,7 @@ ViewsRouter.get('/signup', async(req , res) =>{
     }
 })
 
-ViewsRouter.get('/profile', async(req , res) =>{
+ViewsRouter.get('/profile', authMiddleware , async(req , res) =>{
     try {
 
         res.render('profile')
@@ -30,5 +30,13 @@ ViewsRouter.get('/profile', async(req , res) =>{
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
     }
 })
+
+ViewsRouter.get('/forgotPassword', async (req, res) => {
+    try {
+        res.render ('forgotPassword')   
+    } catch (error) {
+        console.error ('Error get Profile (Views Controller)', error)
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+    }})
 
 module.exports = ViewsRouter

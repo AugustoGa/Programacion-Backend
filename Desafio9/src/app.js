@@ -5,6 +5,8 @@ const exphbs = require('express-handlebars');
 const { Server } = require('socket.io');
 // const Messages = require('./models/messages.model');
 const session = require('express-session');
+const initializePassport = require('./configs/passport.config')
+const passport = require('passport')
 
 const app = express();
 const port = 3000;
@@ -19,6 +21,11 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
 }));
+
+//passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Configuración de Handlebars
 const hbs = exphbs.create({
