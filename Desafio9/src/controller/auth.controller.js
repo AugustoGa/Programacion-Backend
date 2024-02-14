@@ -9,7 +9,7 @@ const users = new Users()
 const AuthRouter = Router()
 
 
-router.post ('/', passport.authenticate('login', {failureRedirect: '/auth/fail-login'}) , async (req, res) => {
+AuthRouter.post ('/', passport.authenticate('login', {failureRedirect: '/auth/fail-login'}) , async (req, res) => {
     try {
         const {email} = req.body
         const user = await users.getOneUser({email})

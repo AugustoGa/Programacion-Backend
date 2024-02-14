@@ -5,7 +5,7 @@ const exphbs = require('express-handlebars');
 const { Server } = require('socket.io');
 // const Messages = require('./models/messages.model');
 const session = require('express-session');
-const initializePassport = require('./configs/passport.config')
+const initializePassport = require('./config/pasaport.config')
 const passport = require('passport')
 
 const app = express();
