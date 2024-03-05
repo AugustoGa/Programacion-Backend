@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const HTTP_RESPONSES = require('../constants/http-resposes')
+const HTTP_RESPONSES = require('../contants/http-responses')
 const CartService = require('../service/carts.service')
 
 const CartsRouter = Router()
@@ -12,7 +12,7 @@ CartsRouter.post('/', async (req, res) => {
     } catch (error) {
         console.error(error)
         
-        res.status(500).json({ error: 'Internal Server Error' })
+        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
     }
 });
 
