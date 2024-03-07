@@ -66,6 +66,73 @@ class CartService{
             console.error('Error cartDelete', error)
         }
     }
+
+    async updateCart ( id , updateProd) {
+        try {
+            const cart = await this.getCartById(id)
+            if ( !cart ) {
+                console.log('Cart not exist db')
+            }
+            if ( updateProd && Array.isArray(updateProd)) {
+                updateProd.forEach(updatePro => {
+                    const productExist = cart.products.find(prod => prod.prodId === updatePro.productId)
+                    if ( productExist ) {
+                        productExist.quantity = updatePro.quantity
+                    } else {
+                        cart.products.push({
+                            prodId : updatePro.productId,
+                            quantity: updatePro.quantity
+                        })
+                    }
+                })
+            } else {
+                console.log('Error inf product')
+            }
+            await cart.save()
+            console.log('Cart Update')
+
+        } catch (error) {
+            console.error('Error updateCart', error)
+        }
+    }
+
+    async updateProductInCart ( id , pid , newQuantity ) {
+        try {
+            const cart = await this.getCartById(id)
+            if ( !cart ) {
+                console.log('Cart not exist')
+            }
+            const productIndex = cart.products.findIndex( product = product.id == pid)
+            if ( productIndex === -1 ) {
+                console.log('Product not found in cart')
+            }
+            cart.products.save()
+            console.log('Cart update exist')
+        } catch (error) {
+            console.error('Error updateProductInCart', error)
+        }
+    }
+
+    async removeProductFromCart ( cid , pid ) {
+        try {
+            const cart = await this.getCartById( cid )
+            const mutableProducts = [...cart.products]
+            const indexToRemove = mutableProducts.findIndex( prod => prod.product.toString().startsWith( pid ))
+            console.log('index of the product to eliminate' , indexToRemove)
+            if ( indexToRemove !== 1 ) {
+                const productRemove = cart.products[indexToRemove]
+                if ( productRemove.quantity > 1) {
+                    productRemove.quantity -=1
+                }else {
+                    cart.products.slice ( indexToRemove , 1)
+                }
+            }
+            await cart.save()
+            console.log('Product removed from cart successfully')
+        } catch (error) {
+            console.error('Error removeProductFromCart', error)
+        }
+    }
 }
 
 module.exports = CartService

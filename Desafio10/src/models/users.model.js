@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const Carts = require('./carts.model')
 
-const usersCollection = 'users'
+
+const usersCollection = 'user'
 
 const usersChema = new mongoose.Schema({
     first_name : {
@@ -28,14 +28,16 @@ const usersChema = new mongoose.Schema({
         type : String,
         enum : ['user' , 'admin'],
         require : true,
-        default : user
+        default : 'user'
     },
     carts : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : Carts,
+        ref : 'carts',
         unique : true,
         default : null
-    }
+    },
+    githubId: Number,
+    githubUsername: String,
 })
 
 const UsersModel = mongoose.model(usersCollection , usersChema)
