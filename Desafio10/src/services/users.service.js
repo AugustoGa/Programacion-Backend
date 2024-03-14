@@ -6,6 +6,7 @@ class UserService{
             return await UsersModel.create( newUser )
         } catch (error) {
             console.error(' Error created User', error)
+            throw new Error('Failed to create user')
         }
     }
 

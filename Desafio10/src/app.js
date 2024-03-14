@@ -3,7 +3,8 @@ const mongoConnect = require('./db/server')
 const Router = require('./routers/index.router')
 const exphbs = require('express-handlebars');
 const { Server } = require('socket.io')
-const session = require('express-session');
+//const session = require('express-session');
+const cookieParser = require('cookie-parser')
 const initializePassport = require('./config/pasaport.config')
 const passport = require('passport')
 
@@ -16,16 +17,16 @@ app.use(express.static(process.cwd() + '/src/public'))
 app.use('/bootstrap', express.static(process.cwd() + '/node_modules/bootstrap/dist'))
 
 // Session
-app.use(session({
-    secret: 'secretCoder',
-    resave: true,
-    saveUninitialized: true,
-}));
-
+//app.use(session({
+//    secret: 'secretCoder',
+//    resave: true,
+//    saveUninitialized: true,
+//}));
+app.use(cookieParser())
 //passport
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
+
 
 // Configuración de Handlebars
 const hbs = exphbs.create({

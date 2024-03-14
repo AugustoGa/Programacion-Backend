@@ -2,7 +2,7 @@ const HTTP_RESPONSES = require('../contants/http-responses')
 
 function authMiddleware ( req , res , next ) {
     try {
-        if ( req.session.user ) return next()
+        if ( req.user ) return next()
         res.redirect('/login') 
     } catch (error) {
         console.error('Error' , error)

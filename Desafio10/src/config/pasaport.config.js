@@ -1,92 +1,85 @@
-const passport = require ('passport')
-const local = require ('passport-local')
-const GithubStrategy = require ('passport-github2')
-const Users = require('../models/user.model')
-const { createHash, useValidPassword } = require('../utils/cryp-password.util')
-const { ghClientId, ghClientSecret } = require('./db.config')
+const passport = require('passport');
+const jwt = require('passport-jwt');
 
-const LocalStrategy = local.Strategy
+
+
+const LocalStrategy = require('passport-local').Strategy;
+const GithubStrategy = require('passport-github2');
+const { SECRET } = require('../utils/jwt.util');
+const extractJwt = require('../utils/extractJwt.util');
+const { ghClientId, ghClientSecret } = require('./db.config');
+const UserService = require('../services/users.service');
+
+const userService = new UserService()
+
+const JwtStrategy = jwt.Strategy;
+const ExtractJwt = jwt.ExtractJwt;
 
 const initializePassport = () => {
-    passport.use(
-        'register',
-         new LocalStrategy(
-       {passReqToCallback: true, usernameField: 'email'},
-       async (req, username, password, done) => {
+    passport.use('jwt', new JwtStrategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([extractJwt]),
+        secretOrKey: SECRET,
+    }, async (payload, done) => {
         try {
-        const {first_name, last_name, age, email} = req.body
-        const user = await Users.findOne ({email: username})
-        if(user) {
-            console.log ('User Exists')
-            return done (null, false)
-        }
-        const newUserInfo = {
-            first_name,
-            last_name,
-            age,
-            email,
-            password: createHash (password),
-        }
-        const newUser = await Users.create(newUserInfo)
-        return done (null, newUser)
+            const user = await userService.getOneUser(payload.sub);
+            if (!user) {
+                return done(null, false);
+            }
+            return done(null, user);
         } catch (error) {
-            return done (error)
+            return done(error, false);
         }
-      })
-    )
+    }));
 
-    passport.use('login',  new LocalStrategy({usernameField: 'email'}, async (username, password, done) => {
+    passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
         try {
-            const user = await Users.findOne({ email: username })
-        if (!user) {
-            console.log ('usuario no existe')
-            return done (null, false)
+            const user = await userService.getOneUser({ email: username });
+            if (!user) {
+                console.log('usuario no existe');
+                return done(null, false);
+            }
+            if (!useValidPassword(user, password)) {
+                console.log('password incorrecta');
+                return done(null, false);
+            }
+            return done(null, user);
+        } catch (error) {
+            return done(error);
         }
-        if (!useValidPassword (user, password)) {
-            console.log ('password incorrecta')
-            return done (null, error)
-        }
-        return done (null, user)
-        }catch (error) {
-            return done (error)
-        }
-    }))
+    }));
 
-    passport.use ('github', new GithubStrategy ({
+    passport.use('github', new GithubStrategy({
         clientID: ghClientId,
         clientSecret: ghClientSecret,
-        callbackURL: "http://localhost:3000/api/auth/githubcallback"
-    }, async (accessToken, refreshToken, profile, done) =>  {
+        callbackURL: 'http://localhost:3000/api/auth/githubcallback'
+    }, async (accessToken, refreshToken, profile, done) => {
         try {
-            const {id, login, name, email} = profile._json
-            const user = await Users.findOne ({email: email})
-            if(!user) {
+            const { id, login, name, email } = profile._json;
+            const user = await Users.findOne({ email: email });
+            if (!user) {
                 const newUserInfo = {
                     first_name: name,
                     email: email,
                     githubId: id,
                     githubUsername: login,
-                }
-                const newUser = await Users.create(newUserInfo)
-                return done (null, newUser)
-            } return done (null, user)
-           
+                };
+                const newUser = await Users.create(newUserInfo);
+                return done(null, newUser);
+            }
+            return done(null, user);
         } catch (error) {
-            console.log (error)
+            console.log(error);
         }
-     })
-    )
+    }));
 
     passport.serializeUser((user, done) => {
-        done(null, user._id)
-    })
+        done(null, user._id);
+    });
 
     passport.deserializeUser(async (id, done) => {
-        const user = Users.findById(id)
-        done(null, user)
-    } )
-    
-}
+        const user = await Users.findById(id);
+        done(null, user);
+    });
+};
 
-
-module.exports = initializePassport
+module.exports = initializePassport;
