@@ -1,10 +1,18 @@
-function handleSignupForm(event) {
+document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.querySelector('.formSignup');
+    
+    if (signupForm) {
+        signupForm.addEventListener('submit', submitForm);
+    }
+});
+
+function submitForm(event) {
     event.preventDefault();
 
     const formData = {
-        first_name: document.getElementById('first_name').value,
-        last_name: document.getElementById('last_name').value,
-        age: document.getElementById('age').value,
+        first_name: document.getElementById('nombre').value,
+        last_name: document.getElementById('apellido').value,
+        age: document.getElementById('edad').value,
         email: document.getElementById('email').value.toUpperCase(),
         password: document.getElementById('password').value,
     };
@@ -36,10 +44,3 @@ function handleSignupForm(event) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const signupForm = document.getElementById('signupForm');
-
-    if (signupForm) {
-        signupForm.addEventListener('submit', handleSignupForm);
-    }
-});
