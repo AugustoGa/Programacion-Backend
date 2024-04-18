@@ -19,7 +19,7 @@ ProductRouter.get('/' , async ( req , res ) => {
         const paginateProducts = await productsService.getProducts( options )
         const { docs , hasPrevPage , hasNexPage , nexPage , prevPage } = paginateProducts
         res.status(HTTP_RESPONSES.OK)
-        res.render('index', {
+        res.render('products', {
             products:
             docs ,
             hasPrevPage ,

@@ -14,24 +14,20 @@ function handleLoginForm(event) {
         body: JSON.stringify(formData),
     })
     .then(response => {
+        console.log('Respuesta del servidor:', response);
         if (!response.ok) {
             throw new Error('Error en la solicitud');
         }
-        return response.json();
+        window.location.href = '/api/products'; // Redirige a la página de productos si la respuesta es exitosa
     })
-    .then(responseData => {
-        if (responseData.status === 'success') {
-            window.location.href = '/api/products';
-        } else {
-            console.log("Inicio de sesión fallido");
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Usuario o Contraseña incorrecta",
-            });
-        }
-    })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Usuario o Contraseña incorrecta",
+        });
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

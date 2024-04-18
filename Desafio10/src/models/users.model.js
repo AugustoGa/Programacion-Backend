@@ -24,6 +24,12 @@ const usersChema = new mongoose.Schema({
         type : String,
         required : true
     },
+    carts : {
+   type : mongoose.Schema.Types.ObjectId,
+    ref : 'carts',
+    unique : true,
+    default : null
+},
     role : {
         type : String,
         enum : ['user' , 'admin'],
@@ -34,14 +40,6 @@ const usersChema = new mongoose.Schema({
     githubUsername: String,
 })
 
-
-//model con cart
-//    carts : {
-//   type : mongoose.Schema.Types.ObjectId,
-//    ref : 'carts',
-//    unique : true,
-//    default : null
-//},
 
 
 const UsersModel = mongoose.model(usersCollection , usersChema)

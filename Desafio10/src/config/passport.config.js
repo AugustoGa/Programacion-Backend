@@ -50,7 +50,10 @@ const initializePassport = () => {
         { usernameField: 'email' }, 
         async (username, password, done) => {
             try {
+                console.log('Intento de inicio de sesión con correo electrónico:', username);
+                console.log('Contraseña proporcionada:', password);
                 const user = await userService.getOneUser({ email: username });
+                console.log('Correo electrónico recibido:', username);
                 if (!user) {
                     console.log('Usuario no existe');
                     return done(null, false);
