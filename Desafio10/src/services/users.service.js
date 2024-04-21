@@ -1,12 +1,17 @@
 const UsersModel = require('../models/users.model')
+const CartService = require('./carts.service')
+
+const cartService = new CartService()
 
 class UserService{
-    async createdUser ( newUser ){
+    async createdUser(newUser) {
         try {
-            return await UsersModel.create( newUser )
+            const newCart = await cartService.cartCreate();
+            newUser.carts = newCart._id;
+            return await UsersModel.create(newUser);
         } catch (error) {
-            console.error(' Error created User', error)
-            throw new Error('Failed to create user')
+            console.error('Error created User', error);
+            throw new Error('Failed to create user');
         }
     }
 

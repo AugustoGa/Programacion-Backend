@@ -5,12 +5,11 @@ const ProductService = require('./products.service')
 const productService = new ProductService()
 
 class CartService{
-    async cartAdd (){
+    async cartCreate (){
         try {
-            const newCart = {
-                products : []
-            }
-            await CartsModel.create( newCart )
+            const newCart = await CartsModel.create({ products: [] })
+            console.log('cart id', newCart._id)
+            return newCart
         } catch (error) {
             console.error('Error cartAdd',error);
         }

@@ -15,6 +15,7 @@ function submitForm(event) {
         age: document.getElementById('edad').value,
         email: document.getElementById('email').value.toUpperCase(),
         password: document.getElementById('password').value,
+        role: document.getElementById('role').value
     };
 
     fetch('/api/users', {
