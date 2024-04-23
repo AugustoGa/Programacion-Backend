@@ -2,7 +2,7 @@ const cartDao = require('../Dao/cartDao')
 
 const Cart = new cartDao
 
-const create = async () => {
+const createCart = async () => {
     try {
         return await Cart.cartCreated()
     } catch (error) {
@@ -18,7 +18,7 @@ const cartId = async ( id ) => {
     }
 }
 
-const carts = async () => {
+const allCarts = async () => {
     try {
         return await Cart.getCarts()
     } catch (error) {
@@ -67,9 +67,9 @@ const removed = async ( cid , pid ) => {
 }
 
 module.exports = {
-    create, 
+    createCart, 
     cartId,
-    carts,
+    allCarts,
     productInCart,
     deleted,
     cartUpdate,

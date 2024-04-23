@@ -1,4 +1,7 @@
 const Cart = require('../models/carts.model')
+const ProductDao = require('./productsDao')
+
+const Product = new ProductDao()
 
 class CartDao{
     async cartCreated() {
@@ -12,7 +15,7 @@ class CartDao{
 
     async getCarts (){
         try {
-            return await CartsModel.find()
+            return await Cart.find()
         } catch (error) {
             console.error('Error getCarts',error);
         }
@@ -20,7 +23,7 @@ class CartDao{
 
     async getCartById ( id ){
         try {
-            return await CartsModel.findById( id )
+            return await Cart.findById( id )
         } catch (error) {
             console.error('Error getCartById',error);
         }
@@ -28,9 +31,9 @@ class CartDao{
 
     async addProductInCart ( cid , pid ){
         try {
-            const cart = await CartsModel.findById( cid )
+            const cart = await Cart.findById( cid )
             if ( cart ){
-                const product = await productService.getProductById( pid )
+                const product = await Product.getProductById( pid )
                 if ( product ){
                     const productIndex = cart.products.findIndex(
                         (prod) => prod.product.toString() === pid.toString())
@@ -55,7 +58,7 @@ class CartDao{
 
     async cartDelete ( id ){
         try {
-            return await CartsModel.deleteOne( id )
+            return await Cart.deleteOne( id )
         } catch (error) {
             console.error('Error cartDelete', error)
         }

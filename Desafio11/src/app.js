@@ -22,15 +22,15 @@ initializePassport()
 app.use(passport.initialize())
 
 // Configuración de Handlebars
-app.engine('.hbs', exphbs({
+const hbs = exphbs.create({
     defaultLayout: 'main',
     layoutsDir: process.cwd() + '/src/views/layouts',
     partialsDir: process.cwd() + '/src/views/partials',
     extname: '.hbs',
     cache: false
-}));
+});
 
-app.set('view engine', '.hbs');
+app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 app.set('views', process.cwd() + '/src/views');
 

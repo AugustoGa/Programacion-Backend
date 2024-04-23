@@ -11,7 +11,7 @@ class ProductsDao{
 
     async getProducts( options ){
         try {
-            const { page , limit , sort , category , stock } = options
+            const { page , limit , sort , category , stock } = options || {}
             const query = { status : true }
             const filter = {
                 $and: [

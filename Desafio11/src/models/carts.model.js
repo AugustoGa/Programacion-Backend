@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Products = require('./products.models')
+const Products = require('./products.model')
 
 const cartsCollection = 'carts'
 
