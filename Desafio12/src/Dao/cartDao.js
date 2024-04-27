@@ -1,5 +1,6 @@
 const Cart = require('../models/carts.model')
 const ProductDao = require('./productsDao')
+const Tiket = require('../models/tiket.model')
 
 const Product = new ProductDao()
 
@@ -12,6 +13,17 @@ class CartDao{
             console.error('Error cartAdd',error);
         }
     }
+
+
+    async tiketCreated ( tiket ) {
+        try {
+            const newTiket = await Tiket.create( tiket )
+            return newTiket 
+        } catch (error) {
+            console.error('Error Tiket Created',error);
+        }
+    }
+
 
     async getCarts (){
         try {
@@ -130,6 +142,7 @@ class CartDao{
             console.error('Error removeProductFromCart', error)
         }
     }
+
 }
 
 module.exports = CartDao

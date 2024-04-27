@@ -20,6 +20,15 @@ AuthRouter.post('/', passport.authenticate('login', { session: false, failureRed
     }
 );
 
+AuthRouter.get('/current', (req, res) => {
+    if (req.isAuthenticated()) {
+        const userDTO = new newUserInfDTO(req.user)
+        res.json({ message: userDTO })
+    } else {
+        res.status(HTTP_RESPONSES.UNAUTHORIZED).json({status: 'error', message: 'User is not authenticated' })
+    }
+})
+
 AuthRouter.get('/fail-login' , ( req , res ) => {
     console.log('fail login')
     res.status(HTTP_RESPONSES.BAD_REQUEST)

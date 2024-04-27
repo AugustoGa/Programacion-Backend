@@ -9,7 +9,7 @@ const CartsRouter = Router()
 
 CartsRouter.post('/', async(req, res)=>{
     try {
-        const carts = await Cart.createCart;
+        const carts = await Cart.createCart();
         res.json({ payload: carts})
     } catch (error) {
         res.json({ error })
@@ -21,6 +21,7 @@ CartsRouter.post('/', async(req, res)=>{
 CartsRouter.get('/:id', async(req, res)=>{
     try {
         const {id} = req.params
+        const { user } = req.session
         const cart = await Cart.cartId({ _id : id});
         res.json({ payload: cart})
     } catch (error) {

@@ -5,39 +5,25 @@ const GithubStrategy = require('passport-github2');
 const { ghClientId, ghClientSecret } = require('./db.config');
 const { createHash, useValidPassword } = require('../utils/cryp-password.util');
 const { userId, created } = require('../services/user.service');
+const newUserDTO = require('../Dto/newUserDto');
 
 
 
 const initializePassport = () => {
     passport.use('register', new LocalStrategy({
-        usernameField: 'email', // Campo del formulario que contiene el correo electrónico
+        usernameField: 'email', 
         passReqToCallback: true 
     }, async (req, username, password, done) => {
         try {
-            
-            const { first_name, last_name , email ,age } = req.body;
-            
-            // Verifica si ya existe un usuario con el correo electrónico proporcionado
             const existingUser = await userId({ email : username });
             if (existingUser) {
                 return done(null, false, { message: 'El correo electrónico ya está en uso' });
             }
-    
-            // Crea un nuevo usuario con la información proporcionada
-            const newUserInf = {
-                first_name,
-                last_name,
-                email,
-                password: createHash(password), // Guarda la contraseña como hash
-                age,
-            };
-
-            const newUser = await created(newUserInf)
-    
-            // Retorna el usuario recién creado
-            return done(null, newUser);
+            const newUserInf = await newUserDTO(req.body, password)
+            const newUser = created(newUserInf)
+            return done ( null , false )
         } catch (error) {
-            return done(error); // Si ocurre un error, pasa el error al middleware de Passport
+            return done(error); 
         }
     }));
 
@@ -93,6 +79,17 @@ const initializePassport = () => {
             console.log(error);
         }
     }));
+
+        passport.use('logout', new LocalStrategy({
+            passReqToCallback: true 
+        }, async (req, done) => {
+            try {
+                req.logout(); 
+                return done(null, true); 
+            } catch (error) {
+                return done(error); 
+            }
+        }));
 };
 
 module.exports = initializePassport;

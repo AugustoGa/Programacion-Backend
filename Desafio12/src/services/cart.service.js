@@ -1,6 +1,6 @@
-const cartDao = require('../Dao/cartDao')
+const CartRepository = require('../repositories/cartRepository')
 
-const Cart = new cartDao
+const Cart = new CartRepository()
 
 const createCart = async () => {
     try {
@@ -12,7 +12,7 @@ const createCart = async () => {
 
 const cartId = async ( id ) => {
     try {
-        return await Cart.getCartById( id )
+        return await Cart.getCartById({ _id: id }).populate('products.product')
     } catch (error) {
         throw error
     }
@@ -66,6 +66,14 @@ const removed = async ( cid , pid ) => {
     }
 }
 
+const createTiket = async ( tiket ) => {
+    try {
+        return await this.Cart.tiketCreated( tiket )
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     createCart, 
     cartId,
@@ -74,5 +82,6 @@ module.exports = {
     deleted,
     cartUpdate,
     updatePro,
-    removed
+    removed,
+    createTiket
 }

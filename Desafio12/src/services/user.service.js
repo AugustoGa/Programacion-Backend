@@ -1,8 +1,8 @@
-const userDao = require('../Dao/userDao')
+const UserRepository = require('../repositories/userRepository')
 const { generateToken } = require('../utils/jwt.util')
 const { createCart } = require('./cart.service')
 
-const User = new userDao()
+const User = new UserRepository()
 
 const created = async ( newUser ) => {
     try {
@@ -41,9 +41,10 @@ const newUserCart = async ( userData ) => {
 
 
 const loginUser = async ( userData ) =>{
-    const { email, password } = userData
-    const lowercaseEmail = email.toLowerCase()
-    const user = await userId({ email })
+    try {
+        const { email, password } = userData
+        const lowercaseEmail = email.toLowerCase()
+        const user = await userId({ email })
 
         const tokenInf = {
             first_name: user.first_name,
@@ -54,11 +55,14 @@ const loginUser = async ( userData ) =>{
         };
         const token = generateToken(tokenInf)
         return { token }
+    } catch (error) {
+        throw error
+    }
 }
 
 const updateUserCart = async (userId, cartId) => {
     try {
-        const user = await userDao.getUserById(userId);
+        const user = await userId(userId);
         if (!user) {
             throw new Error('User not found');
         }

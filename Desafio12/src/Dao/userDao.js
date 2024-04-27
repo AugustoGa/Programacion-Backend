@@ -5,11 +5,11 @@ const Cart = new CartDao()
 
 
 class UserDao{
-    async createdUser( newUser ) {
+    async createdUser( newUserDTO ) {
         try {
             const newCart = await Cart.cartCreated();
             newUser.cart = newCart._id
-            return await User.create( newUser )
+            return await User.create( newUserDTO )
         } catch (error) {
             console.error('Error created User', error)
             throw new Error('Failed to create user');
